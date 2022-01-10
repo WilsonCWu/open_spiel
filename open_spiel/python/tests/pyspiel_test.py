@@ -111,6 +111,7 @@ EXPECTED_GAMES = set([
     "tiny_bridge_4p",
     "tiny_hanabi",
     "trade_comm",
+    "tt",
     "turn_based_simultaneous_game",
     "y",
 ])
