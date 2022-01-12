@@ -3,8 +3,9 @@ import numpy as np
 import requests
 import json
 
-VALID_CHARS = [0, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 16, 17, 18, 19, 21, 22, 23, 24, 26, 30, 31, 32, 33, 34, 35, 37, 38]
-
+TITAN_IDS = [0, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 16, 17, 18, 19, 21, 22, 23, 24, 26, 30, 31, 32, 33, 34, 35, 37, 38]
+NUM_TILES = 25
+MAX_TITANS = 5
 
 def check_server_win(self, board):
   print("TODO")

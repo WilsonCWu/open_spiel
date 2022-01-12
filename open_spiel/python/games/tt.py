@@ -32,23 +32,18 @@ import enum
 import numpy as np
 
 import pyspiel
-
-
-class Action(enum.IntEnum):
-  PASS = 0
-  BET = 1
-
+from open_spiel.python.games.tt_utils import *
 
 _NUM_PLAYERS = 2
-_DECK = frozenset([0, 1, 2])
+_NUM_ACTIONS = (len(TITAN_IDS) + NUM_TILES)*MAX_TITANS
 _GAME_TYPE = pyspiel.GameType(
     short_name="tt",
     long_name="Tiny Titans",
     dynamics=pyspiel.GameType.Dynamics.SEQUENTIAL,
-    chance_mode=pyspiel.GameType.ChanceMode.EXPLICIT_STOCHASTIC,
+    chance_mode=pyspiel.GameType.ChanceMode.DETERMINISTIC,
     information=pyspiel.GameType.Information.IMPERFECT_INFORMATION,
     utility=pyspiel.GameType.Utility.ZERO_SUM,
-    reward_model=pyspiel.GameType.RewardModel.TERMINAL,
+    reward_model=pyspiel.GameType.RewardModel.REWARDS,
     max_num_players=_NUM_PLAYERS,
     min_num_players=_NUM_PLAYERS,
     provides_information_state_string=True,
@@ -57,13 +52,13 @@ _GAME_TYPE = pyspiel.GameType(
     provides_observation_tensor=True,
     provides_factored_observation_string=True)
 _GAME_INFO = pyspiel.GameInfo(
-    num_distinct_actions=len(Action),
-    max_chance_outcomes=len(_DECK),
+    num_distinct_actions=_NUM_ACTIONS,
+    #max_chance_outcomes=len(_DECK),
     num_players=_NUM_PLAYERS,
-    min_utility=-2.0,
-    max_utility=2.0,
+    min_utility=-1.02,
+    max_utility=1.02,
     utility_sum=0.0,
-    max_game_length=3)  # e.g. Pass, Bet, Bet
+    max_game_length=54)
 
 
 class TTGame(pyspiel.Game):
@@ -89,12 +84,17 @@ class TTState(pyspiel.State):
   def __init__(self, game):
     """Constructor; should only be called by Game.new_initial_state."""
     super().__init__(game)
-    self.cards = []
-    self.bets = []
-    self.pot = [1.0, 1.0]
-    self._game_over = False
+    self.score = [0, 0]
+    # 0 is titan, 1 is pos
+    self.titans = np.full((_NUM_PLAYERS, MAX_TITANS, 2), -1)
+    self._round = 0 # represents the group of turns that leads into a battle
+    self._next_titan_index = 0 # used to count turns
+    self._next_tile_index = 0 # used to count turns
     self._next_player = 0
+    self._game_over = False
 
+  def _cur_max_titan_index(self):
+    return min(self._round+3, MAX_TITANS)
   # OpenSpiel (PySpiel) API functions are below. This is the standard set that
   # should be implemented by every sequential-move game with chance.
 
@@ -102,22 +102,38 @@ class TTState(pyspiel.State):
     """Returns id of the next player to move, or TERMINAL if game is over."""
     if self._game_over:
       return pyspiel.PlayerId.TERMINAL
-    elif len(self.cards) < _NUM_PLAYERS:
-      return pyspiel.PlayerId.CHANCE
     else:
       return self._next_player
 
   def _legal_actions(self, player):
     """Returns a list of legal actions, sorted in ascending order."""
     assert player >= 0
-    return [Action.PASS, Action.BET]
+    ret = []
+
+    # note that these contain -1, but that's ok
+    used_titans = set(self.titans[player,:,0])
+    used_tiles = set(self.titans[player,:,1])
+
+    if self._next_titan_index < self._cur_max_titan_index():
+      base_index = self._next_titan_index*len(TITAN_IDS)
+      for titan_index in range(len(TITAN_IDS)):
+        if titan_index not in used_titans:
+          ret.append((base_index+titan_index))
+      return ret
+    else: # pos index
+      base_index = MAX_TITANS*len(TITAN_IDS) + self._next_tile_index*NUM_TILES
+      for tile_index in range(NUM_TILES):
+        if tile_index not in used_tiles:
+          ret.append((base_index+tile_index))
+      return ret
+
+
 
   def chance_outcomes(self):
+    assert False, "not implemented"
     """Returns the possible chance outcomes and their probabilities."""
     assert self.is_chance_node()
-    outcomes = sorted(_DECK - set(self.cards))
-    p = 1.0 / len(outcomes)
-    return [(o, p) for o in outcomes]
+    return 0
 
   def _apply_action(self, action):
     """Applies the specified action to the state."""
