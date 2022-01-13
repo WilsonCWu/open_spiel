@@ -42,7 +42,7 @@ _GAME_TYPE = pyspiel.GameType(
     dynamics=pyspiel.GameType.Dynamics.SEQUENTIAL,
     chance_mode=pyspiel.GameType.ChanceMode.DETERMINISTIC,
     information=pyspiel.GameType.Information.IMPERFECT_INFORMATION,
-    utility=pyspiel.GameType.Utility.ZERO_SUM,
+    utility=pyspiel.GameType.Utility.GENERAL_SUM,
     reward_model=pyspiel.GameType.RewardModel.REWARDS,
     max_num_players=_NUM_PLAYERS,
     min_num_players=_NUM_PLAYERS,
@@ -55,8 +55,8 @@ _GAME_INFO = pyspiel.GameInfo(
     num_distinct_actions=_NUM_ACTIONS,
     #max_chance_outcomes=len(_DECK),
     num_players=_NUM_PLAYERS,
-    min_utility=-1.02,
-    max_utility=1.02,
+    min_utility=-1.03,
+    max_utility=1.03,
     utility_sum=0.0,
     max_game_length=54)
 
@@ -86,14 +86,13 @@ class TTState(pyspiel.State):
     super().__init__(game)
     self.score = [0, 0]
     # 0 is titan, 1 is pos
-    self.titans = np.full((_NUM_PLAYERS, MAX_TITANS, 2), -1)
+    self.titans = [[], []]
+    self.tiles = [[], []]
     self._round = 0 # represents the group of turns that leads into a battle
-    self._next_titan_index = 0 # used to count turns
-    self._next_tile_index = 0 # used to count turns
     self._next_player = 0
     self._game_over = False
 
-  def _cur_max_titan_index(self):
+  def _cur_max_titans(self):
     return min(self._round+3, MAX_TITANS)
   # OpenSpiel (PySpiel) API functions are below. This is the standard set that
   # should be implemented by every sequential-move game with chance.
@@ -110,18 +109,19 @@ class TTState(pyspiel.State):
     assert player >= 0
     ret = []
 
-    # note that these contain -1, but that's ok
-    used_titans = set(self.titans[player,:,0])
-    used_tiles = set(self.titans[player,:,1])
+    my_titans = self.titans[player]
+    my_tiles = self.tiles[player]
+    used_titans = set(my_titans)
+    used_tiles = set(my_tiles)
 
-    if self._next_titan_index < self._cur_max_titan_index():
-      base_index = self._next_titan_index*len(TITAN_IDS)
+    if len(my_titans) < self._cur_max_titan_index():
+      base_index = len(my_titans)*len(TITAN_IDS)
       for titan_index in range(len(TITAN_IDS)):
         if titan_index not in used_titans:
           ret.append((base_index+titan_index))
       return ret
-    else: # pos index
-      base_index = MAX_TITANS*len(TITAN_IDS) + self._next_tile_index*NUM_TILES
+    else: # tile index
+      base_index = MAX_TITANS*len(TITAN_IDS) + len(my_tiles)*NUM_TILES
       for tile_index in range(NUM_TILES):
         if tile_index not in used_tiles:
           ret.append((base_index+tile_index))
@@ -138,25 +138,53 @@ class TTState(pyspiel.State):
   def _apply_action(self, action):
     """Applies the specified action to the state."""
     if self.is_chance_node():
-      self.cards.append(action)
+      assert False, "Not Implemented"
+      return
+    my_titans = self.titans[self._next_player]
+    my_tiles = self.tiles[self._next_player]
+    base_tile_index = MAX_TITANS*len(TITAN_IDS)
+
+    if action < base_tile_index: # create titan
+      assert len(my_titans) < self._cur_max_titans()
+      titan_slot = action//len(TITAN_IDS)
+      assert titan_slot == len(my_titans)
+      my_titans.append(action % len(TITAN_IDS))
+    else:  # set tile
+      assert len(my_tiles) < len(my_titans)
+      tile_slot = (action-base_tile_index)//NUM_TILES
+      assert tile_slot == len(my_tiles)
+      my_tiles.append((action-base_tile_index) % NUM_TILES)
+
+    # self round placement still incomplete
+    if len(my_titans) < self._cur_max_titans() or len(my_tiles) < len(my_titans):
+      return
+
+    # player 0 done, player 1 turn
+    if self._next_player == 0:
+      self._next_player = 1
+      return
+
+    # both done, play a game
+    is_p0_win = check_server_win(self.titans, self.tiles)
+    if is_p0_win:
+      self.score[0] += 1
     else:
-      self.bets.append(action)
-      if action == Action.BET:
-        self.pot[self._next_player] += 1
-      self._next_player = 1 - self._next_player
-      if ((min(self.pot) == 2) or
-          (len(self.bets) == 2 and action == Action.PASS) or
-          (len(self.bets) == 3)):
-        self._game_over = True
+      self.score[1] += 1
+
+    # if a round ended
+    if self.score[0] != 3 and self.score[1] != 3:
+      self._round += 1
+      self._next_player = 0
+      self.tiles = [[], []]
+      return
+
+    # if is complete
+    self._game_over = True
+
 
   def _action_to_string(self, player, action):
     """Action -> string."""
-    if player == pyspiel.PlayerId.CHANCE:
-      return f"Deal:{action}"
-    elif action == Action.PASS:
-      return "Pass"
-    else:
-      return "Bet"
+    return f"{player}: {action}"
 
   def is_terminal(self):
     """Returns True if the game is over."""
@@ -164,22 +192,11 @@ class TTState(pyspiel.State):
 
   def returns(self):
     """Total reward for each player over the course of the game so far."""
-    pot = self.pot
-    winnings = float(min(pot))
-    if not self._game_over:
-      return [0., 0.]
-    elif pot[0] > pot[1]:
-      return [winnings, -winnings]
-    elif pot[0] < pot[1]:
-      return [-winnings, winnings]
-    elif self.cards[0] > self.cards[1]:
-      return [winnings, -winnings]
-    else:
-      return [-winnings, winnings]
+    return [self.score[0]//3 + self.score[0]*0.01, self.score[1]//3 + self.score[1]*0.01]
 
   def __str__(self):
     """String for debug purposes. No particular semantics are required."""
-    return "".join([str(c) for c in self.cards] + ["pb"[b] for b in self.bets])
+    return "TODO debug str"
 
 
 class TTObserver:
