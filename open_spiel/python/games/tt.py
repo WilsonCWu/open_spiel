@@ -42,7 +42,7 @@ _GAME_TYPE = pyspiel.GameType(
     dynamics=pyspiel.GameType.Dynamics.SEQUENTIAL,
     chance_mode=pyspiel.GameType.ChanceMode.DETERMINISTIC,
     information=pyspiel.GameType.Information.IMPERFECT_INFORMATION,
-    utility=pyspiel.GameType.Utility.GENERAL_SUM,
+    utility=pyspiel.GameType.Utility.ZERO_SUM,
     reward_model=pyspiel.GameType.RewardModel.REWARDS,
     max_num_players=_NUM_PLAYERS,
     min_num_players=_NUM_PLAYERS,
@@ -192,7 +192,9 @@ class TTState(pyspiel.State):
 
   def returns(self):
     """Total reward for each player over the course of the game so far."""
-    return [self.score[0]//3 + self.score[0]*0.01, self.score[1]//3 + self.score[1]*0.01]
+    points_0 = self.score[0]//3 + self.score[0]*0.01
+    points_1 = self.score[1]//3 + self.score[1]*0.01
+    return [points_0-points_1, points_1-points_0]
 
   def __str__(self):
     """String for debug purposes. No particular semantics are required."""
