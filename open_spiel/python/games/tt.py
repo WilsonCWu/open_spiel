@@ -36,6 +36,12 @@ from open_spiel.python.games.tt_utils import *
 
 _NUM_PLAYERS = 2
 _NUM_ACTIONS = (len(TITAN_IDS) + NUM_TILES)*MAX_TITANS
+_MAX_GAME_LENGTH = 54
+# r1: (3 titans + 3 tiles) * 2 players
+# r2: (1 titan + 4 tiles) * 2 players
+# r3: (1 titan + 5 tiles) * 2 players
+# r4: (5 tiles) * 2 players
+# r5: (5 tiles) * 2 players
 _GAME_TYPE = pyspiel.GameType(
     short_name="tt",
     long_name="Tiny Titans",
@@ -58,7 +64,8 @@ _GAME_INFO = pyspiel.GameInfo(
     min_utility=-1.03,
     max_utility=1.03,
     utility_sum=0.0,
-    max_game_length=54)
+    max_game_length=_MAX_GAME_LENGTH)
+
 
 
 class TTGame(pyspiel.Game):
@@ -88,12 +95,15 @@ class TTState(pyspiel.State):
     # 0 is titan, 1 is pos
     self.titans = [[], []]
     self.tiles = [[], []]
-    self._round = 0 # represents the group of turns that leads into a battle
+    self.last_tiles = [[], []]
+    self.round = 0 # represents the group of turns that leads into a battle
+    self.actions = []
     self._next_player = 0
     self._game_over = False
 
   def _cur_max_titans(self):
-    return min(self._round+3, MAX_TITANS)
+    return min(self.round+3, MAX_TITANS)
+
   # OpenSpiel (PySpiel) API functions are below. This is the standard set that
   # should be implemented by every sequential-move game with chance.
 
@@ -140,6 +150,8 @@ class TTState(pyspiel.State):
     if self.is_chance_node():
       assert False, "Not Implemented"
       return
+    else:
+      self.actions.append(action)
     my_titans = self.titans[self._next_player]
     my_tiles = self.tiles[self._next_player]
     base_tile_index = MAX_TITANS*len(TITAN_IDS)
@@ -173,8 +185,9 @@ class TTState(pyspiel.State):
 
     # if a round ended
     if self.score[0] != 3 and self.score[1] != 3:
-      self._round += 1
+      self.round += 1
       self._next_player = 0
+      self.last_tiles = self.tiles
       self.tiles = [[], []]
       return
 
@@ -210,14 +223,17 @@ class TTObserver:
       raise ValueError(f"Observation parameters not supported; passed {params}")
 
     # Determine which observation pieces we want to include.
-    pieces = [("player", 2, (2,))]
+    pieces = [("player", 2, (2,)), ("round", 1, (1,))]
     if iig_obs_type.private_info == pyspiel.PrivateInfoType.SINGLE_PLAYER:
-      pieces.append(("private_card", 3, (3,)))
+      pieces.append(("private_titans", MAX_TITANS * len(TITAN_IDS), (MAX_TITANS, len(TITAN_IDS))))
+      pieces.append(("private_tiles", MAX_TITANS * len(NUM_TILES), (MAX_TITANS, len(NUM_TILES))))
     if iig_obs_type.public_info:
       if iig_obs_type.perfect_recall:
-        pieces.append(("betting", 6, (3, 2)))
+        pieces.append(("actions", _MAX_GAME_LENGTH*_NUM_ACTIONS, (_MAX_GAME_LENGTH, _NUM_ACTIONS)))
       else:
-        pieces.append(("pot_contribution", 2, (2,)))
+        pieces.append(("score", 2, (2,)))
+        pieces.append(("public_titans", MAX_TITANS * len(TITAN_IDS) * 2, (MAX_TITANS, len(TITAN_IDS), 2)))
+        pieces.append(("public_tiles", MAX_TITANS * len(NUM_TILES) * 2, (MAX_TITANS, len(NUM_TILES), 2)))
 
     # Build the single flat tensor.
     total_size = sum(size for name, size, shape in pieces)
@@ -230,32 +246,55 @@ class TTObserver:
       self.dict[name] = self.tensor[index:index + size].reshape(shape)
       index += size
 
-  def set_from(self, state, player):
+  def set_from(self, state: TTState, player):
     """Updates `tensor` and `dict` to reflect `state` from PoV of `player`."""
     self.tensor.fill(0)
     if "player" in self.dict:
       self.dict["player"][player] = 1
-    if "private_card" in self.dict and len(state.cards) > player:
-      self.dict["private_card"][state.cards[player]] = 1
-    if "pot_contribution" in self.dict:
-      self.dict["pot_contribution"][:] = state.pot
-    if "betting" in self.dict:
-      for turn, action in enumerate(state.bets):
-        self.dict["betting"][turn, action] = 1
+    if "round" in self.dict:
+      self.dict["round"][0] = state.round
+    if "score" in self.dict:
+      self.dict["score"][0] = state.score[0]
+      self.dict["score"][1] = state.score[1]
+    if "private_titans" in self.dict:
+      for i, titan in enumerate(state.titans[player]):
+        self.dict["private_titans"][i][titan] = 1
+    if "private_tiles" in self.dict:
+      for i, tile in enumerate(state.tiles[player]):
+        self.dict["private_tiles"][i][tile] = 1
+    if "public_titans" in self.dict:
+      for cur_player in range(2):
+        for i, titan in enumerate(state.titans[cur_player][:len(state.last_tiles[cur_player])]):
+          self.dict["private_titans"][i][titan][cur_player] = 1
+    if "public_tiles" in self.dict:
+      for cur_player in range(2):
+        for i, tile in enumerate(state.last_tiles[cur_player]):
+          self.dict["private_titans"][i][tile][cur_player] = 1
+    if "actions" in self.dict:
+      for turn, action in enumerate(state.actions):
+        self.dict["actions"][turn, action] = 1
 
-  def string_from(self, state, player):
+  def string_from(self, state: TTState, player):
     """Observation of `state` from the PoV of `player`, as a string."""
     pieces = []
     if "player" in self.dict:
       pieces.append(f"p{player}")
-    if "private_card" in self.dict and len(state.cards) > player:
-      pieces.append(f"card:{state.cards[player]}")
-    if "pot_contribution" in self.dict:
-      pieces.append(f"pot[{int(state.pot[0])} {int(state.pot[1])}]")
-    if "betting" in self.dict and state.bets:
-      pieces.append("".join("pb"[b] for b in state.bets))
-    return " ".join(str(p) for p in pieces)
-
+    if "round" in self.dict:
+      pieces.append(f"round {state.round}")
+    if "score" in self.dict:
+      pieces.append(f"score {state.score}")
+    if "private_titans" in self.dict:
+      pieces.append(f"private titans {state.titans[player]}")
+    if "private_tiles" in self.dict:
+      pieces.append(f"private tiles {state.tiles[player]}")
+    if "public_titans" in self.dict:
+      for cur_player in range(2):
+        pieces.append(f"public titans p{cur_player} {state.titans[cur_player][:len(state.last_tiles[cur_player])]}")
+    if "public_tiles" in self.dict:
+      for cur_player in range(2):
+        pieces.append(f"private tiles p{cur_player} {state.last_tiles[player]}")
+    if "actions" in self.dict:
+        pieces.append(f"action history {self.dict['actions']}")
 
 # Register the game with the OpenSpiel library
 
