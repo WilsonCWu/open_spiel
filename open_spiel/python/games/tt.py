@@ -92,10 +92,9 @@ class TTState(pyspiel.State):
     """Constructor; should only be called by Game.new_initial_state."""
     super().__init__(game)
     self.score = [0, 0]
-    # 0 is titan, 1 is pos
     self.titans = [[], []]
     self.tiles = [[], []]
-    self.last_tiles = [[], []]
+    self.last_tiles = [[], []] # needed because we wipe placements on new rounds
     self.round = 0 # represents the group of turns that leads into a battle
     self.actions = []
     self._next_player = 0
@@ -140,9 +139,9 @@ class TTState(pyspiel.State):
 
 
   def chance_outcomes(self):
-    assert False, "not implemented"
     """Returns the possible chance outcomes and their probabilities."""
     assert self.is_chance_node()
+    assert False, "not implemented"
     return 0
 
   def _apply_action(self, action):
