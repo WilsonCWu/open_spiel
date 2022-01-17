@@ -59,13 +59,12 @@ _GAME_TYPE = pyspiel.GameType(
     provides_factored_observation_string=True)
 _GAME_INFO = pyspiel.GameInfo(
     num_distinct_actions=_NUM_ACTIONS,
-    #max_chance_outcomes=len(_DECK),
+    max_chance_outcomes=0,
     num_players=_NUM_PLAYERS,
     min_utility=-1.03,
     max_utility=1.03,
     utility_sum=0.0,
     max_game_length=_MAX_GAME_LENGTH)
-
 
 
 class TTGame(pyspiel.Game):

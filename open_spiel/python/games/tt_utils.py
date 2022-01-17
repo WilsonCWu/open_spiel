@@ -36,13 +36,24 @@ TITAN_ID_TO_NAME = {
 }
 NUM_TILES = 25
 MAX_TITANS = 5
+PLACEMENT_TEMPLATE = """[{"placement_id":1231,"pos_1":%s,"char_1":{"char_id":6000,"user":0,"char_type":%s,"level":%s,"prestige":%s,"copies":1,"hat":{"item_id":0,"user":0,"item_type":0,"exp":0},"armor":{"item_id":0,"user":0,"item_type":0,"exp":0},"weapon":{"item_id":0,"user":0,"item_type":0,"exp":0},"boots":{"item_id":0,"user":0,"item_type":0,"exp":0},"trinket_1":{"item_id":0,"user":0,"item_type":0,"exp":0},"trinket_2":{"item_id":0,"user":0,"item_type":0,"exp":0},"is_tourney":false},"pos_2":%s,"char_2":{"char_id":0,"user":0,"char_type":%s,"level":%s,"prestige":%s,"copies":0,"hat":{"item_id":0,"user":0,"item_type":0,"exp":0},"armor":{"item_id":0,"user":0,"item_type":0,"exp":0},"weapon":{"item_id":0,"user":0,"item_type":0,"exp":0},"boots":{"item_id":0,"user":0,"item_type":0,"exp":0},"trinket_1":{"item_id":0,"user":0,"item_type":0,"exp":0},"trinket_2":{"item_id":0,"user":0,"item_type":0,"exp":0},"is_tourney":false},"pos_3":%s,"char_3":{"char_id":0,"user":0,"char_type":%s,"level":%s,"prestige":%s,"copies":0,"hat":{"item_id":0,"user":0,"item_type":0,"exp":0},"armor":{"item_id":0,"user":0,"item_type":0,"exp":0},"weapon":{"item_id":0,"user":0,"item_type":0,"exp":0},"boots":{"item_id":0,"user":0,"item_type":0,"exp":0},"trinket_1":{"item_id":0,"user":0,"item_type":0,"exp":0},"trinket_2":{"item_id":0,"user":0,"item_type":0,"exp":0},"is_tourney":false},"pos_4":%s,"char_4":{"char_id":0,"user":0,"char_type":%s,"level":%s,"prestige":%s,"copies":0,"hat":{"item_id":0,"user":0,"item_type":0,"exp":0},"armor":{"item_id":0,"user":0,"item_type":0,"exp":0},"weapon":{"item_id":0,"user":0,"item_type":0,"exp":0},"boots":{"item_id":0,"user":0,"item_type":0,"exp":0},"trinket_1":{"item_id":0,"user":0,"item_type":0,"exp":0},"trinket_2":{"item_id":0,"user":0,"item_type":0,"exp":0},"is_tourney":false},"pos_5":%s,"char_5":{"char_id":0,"user":0,"char_type":%s,"level":%s,"prestige":%s,"copies":0,"hat":{"item_id":0,"user":0,"item_type":0,"exp":0},"armor":{"item_id":0,"user":0,"item_type":0,"exp":0},"weapon":{"item_id":0,"user":0,"item_type":0,"exp":0},"boots":{"item_id":0,"user":0,"item_type":0,"exp":0},"trinket_1":{"item_id":0,"user":0,"item_type":0,"exp":0},"trinket_2":{"item_id":0,"user":0,"item_type":0,"exp":0},"is_tourney":false}},{"placement_id":1233,"pos_1":%s,"char_1":{"char_id":6015,"user":0,"char_type":%s,"level":%s,"prestige":%s,"copies":0,"hat":{"item_id":0,"user":0,"item_type":0,"exp":0},"armor":{"item_id":0,"user":0,"item_type":0,"exp":0},"weapon":{"item_id":0,"user":0,"item_type":0,"exp":0},"boots":{"item_id":0,"user":0,"item_type":0,"exp":0},"trinket_1":{"item_id":0,"user":0,"item_type":0,"exp":0},"trinket_2":{"item_id":0,"user":0,"item_type":0,"exp":0},"is_tourney":false},"pos_2":%s,"char_2":{"char_id":6010,"user":0,"char_type":%s,"level":%s,"prestige":%s,"copies":2,"hat":{"item_id":0,"user":0,"item_type":0,"exp":0},"armor":{"item_id":0,"user":0,"item_type":0,"exp":0},"weapon":{"item_id":0,"user":0,"item_type":0,"exp":0},"boots":{"item_id":0,"user":0,"item_type":0,"exp":0},"trinket_1":{"item_id":0,"user":0,"item_type":0,"exp":0},"trinket_2":{"item_id":0,"user":0,"item_type":0,"exp":0},"is_tourney":false},"pos_3":%s,"char_3":{"char_id":6009,"user":0,"char_type":%s,"level":%s,"prestige":%s,"copies":1,"hat":{"item_id":0,"user":0,"item_type":0,"exp":0},"armor":{"item_id":0,"user":0,"item_type":0,"exp":0},"weapon":{"item_id":0,"user":0,"item_type":0,"exp":0},"boots":{"item_id":0,"user":0,"item_type":0,"exp":0},"trinket_1":{"item_id":0,"user":0,"item_type":0,"exp":0},"trinket_2":{"item_id":0,"user":0,"item_type":0,"exp":0},"is_tourney":false},"pos_4":%s,"char_4":{"char_id":0,"user":0,"char_type":%s,"level":%s,"prestige":%s,"copies":0,"hat":{"item_id":0,"user":0,"item_type":0,"exp":0},"armor":{"item_id":0,"user":0,"item_type":0,"exp":0},"weapon":{"item_id":0,"user":0,"item_type":0,"exp":0},"boots":{"item_id":0,"user":0,"item_type":0,"exp":0},"trinket_1":{"item_id":0,"user":0,"item_type":0,"exp":0},"trinket_2":{"item_id":0,"user":0,"item_type":0,"exp":0},"is_tourney":false},"pos_5":%s,"char_5":{"char_id":0,"user":0,"char_type":%s,"level":%s,"prestige":%s,"copies":0,"hat":{"item_id":0,"user":0,"item_type":0,"exp":0},"armor":{"item_id":0,"user":0,"item_type":0,"exp":0},"weapon":{"item_id":0,"user":0,"item_type":0,"exp":0},"boots":{"item_id":0,"user":0,"item_type":0,"exp":0},"trinket_1":{"item_id":0,"user":0,"item_type":0,"exp":0},"trinket_2":{"item_id":0,"user":0,"item_type":0,"exp":0},"is_tourney":false}}]"""
+def create_placement_str(titan_indexes, tile_indexes):
+    formatData = []
 
-def check_server_win(self, titan_indexes, tile_indexes):
-  print("TODO")
-  placementJsonStr = self._createPlacementJsonStr(board)
+    for player in range(2):
+      for titan_index, tile_index in zip(titan_indexes[player], tile_indexes[player]):
+        # tile, char id, level, prestige
+        formatData.extend([tile_index+1, TITAN_IDS[titan_index], 240, -1])
+      # pad to 5
+      for _ in range(MAX_TITANS-len(titan_indexes[player])):
+        formatData.extend([0, -1, 0, -1])
+    return PLACEMENT_TEMPLATE % tuple(formatData)
+
+def check_server_win(titan_indexes, tile_indexes):
+  placementJsonStr = create_placement_str(titan_indexes, tile_indexes)
   while True:
     try:
-      response = requests.get("http://192.168.0.24:8007/simulate/1337/", data=placementJsonStr, timeout=10)
+      response = requests.get("http://107.175.102.16:8007/simulate/1337/", data=placementJsonStr, timeout=10)
       if response.status_code == 200:
         break
       else:
