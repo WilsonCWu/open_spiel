@@ -53,7 +53,7 @@ def check_server_win(titan_indexes, tile_indexes):
   placementJsonStr = create_placement_str(titan_indexes, tile_indexes)
   while True:
     try:
-      response = requests.get("http://107.175.102.16:8007/simulate/1337/", data=placementJsonStr, timeout=10)
+      response = requests.get("http://192.168.3.112:8007/simulate/1337/", data=placementJsonStr, timeout=10)
       if response.status_code == 200:
         break
       else:

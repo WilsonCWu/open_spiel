@@ -122,7 +122,7 @@ class TTState(pyspiel.State):
     used_titans = set(my_titans)
     used_tiles = set(my_tiles)
 
-    if len(my_titans) < self._cur_max_titan_index():
+    if len(my_titans) < self._cur_max_titans():
       base_index = len(my_titans)*len(TITAN_IDS)
       for titan_index in range(len(TITAN_IDS)):
         if titan_index not in used_titans:
