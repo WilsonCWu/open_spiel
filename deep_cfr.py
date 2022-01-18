@@ -35,8 +35,6 @@ tf.disable_v2_behavior()
 
 FLAGS = flags.FLAGS
 
-flags.DEFINE_integer("num_iterations", 400, "Number of iterations")
-flags.DEFINE_integer("num_traversals", 40, "Number of traversals/games")
 flags.DEFINE_string("game_name", "tt", "Name of the game")
 
 
@@ -49,17 +47,17 @@ def main(unused_argv):
         game,
         policy_network_layers=(16,),
         advantage_network_layers=(16,),
-        num_iterations=FLAGS.num_iterations,
-        num_traversals=FLAGS.num_traversals,
+        num_iterations=2,#400,
+        num_traversals=2,#40,
         learning_rate=1e-3,
-        batch_size_advantage=128,
-        batch_size_strategy=1024,
-        memory_capacity=1e7,
-        policy_network_train_steps=400,
-        advantage_network_train_steps=20,
+        batch_size_advantage=16,#128,
+        batch_size_strategy=128,#1024,
+        memory_capacity=1e4,#1e7,
+        policy_network_train_steps=2,#400,
+        advantage_network_train_steps=2,#20,
         reinitialize_advantage_networks=False)
     sess.run(tf.global_variables_initializer())
-    _, advantage_losses, policy_loss = deep_cfr_solver.solve()
+    policy_network, advantage_losses, policy_loss = deep_cfr_solver.solve()
     for player, losses in advantage_losses.items():
       logging.info("Advantage for player %d: %s", player,
                    losses[:2] + ["..."] + losses[-2:])

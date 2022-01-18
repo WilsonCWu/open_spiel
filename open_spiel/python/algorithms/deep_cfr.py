@@ -31,6 +31,7 @@ import collections
 import random
 import numpy as np
 import tensorflow.compat.v1 as tf
+from tqdm import tqdm
 
 from open_spiel.python import policy
 from open_spiel.python import simple_nets
@@ -267,9 +268,9 @@ class DeepCFRSolver(policy.Policy):
   def solve(self):
     """Solution logic for Deep CFR."""
     advantage_losses = collections.defaultdict(list)
-    for _ in range(self._num_iterations):
+    for _ in tqdm(range(self._num_iterations)):
       for p in range(self._num_players):
-        for _ in range(self._num_traversals):
+        for _ in tqdm(range(self._num_traversals), leave=False):
           self._traverse_game_tree(self._root_node, p)
         if self._reinitialize_advantage_networks:
           # Re-initialize advantage network for player and train from scratch.
@@ -297,6 +298,7 @@ class DeepCFRSolver(policy.Policy):
     self._environment_steps += 1
     expected_payoff = collections.defaultdict(float)
     if state.is_terminal():
+      print(f"terminal {self._environment_steps}")
       # Terminal state get returns.
       return state.returns()[player]
     elif state.is_chance_node():
@@ -385,7 +387,7 @@ class DeepCFRSolver(policy.Policy):
     Returns:
       The average loss over the advantage network.
     """
-    for _ in range(self._advantage_network_train_steps):
+    for _ in tqdm(range(self._advantage_network_train_steps), leave=False):
       if self._batch_size_advantage:
         if self._batch_size_advantage > len(self._advantage_memories[player]):
           ## Skip if there aren't enough samples
@@ -420,7 +422,8 @@ class DeepCFRSolver(policy.Policy):
     Returns:
       The average loss obtained on this batch of transitions or `None`.
     """
-    for _ in range(self._policy_network_train_steps):
+    print("learning strategy network")
+    for _ in tqdm(range(self._policy_network_train_steps)):
       if self._batch_size_strategy:
         if self._batch_size_strategy > len(self._strategy_memories):
           ## Skip if there aren't enough samples
