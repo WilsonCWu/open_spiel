@@ -49,7 +49,7 @@ _GAME_TYPE = pyspiel.GameType(
     chance_mode=pyspiel.GameType.ChanceMode.DETERMINISTIC,
     information=pyspiel.GameType.Information.IMPERFECT_INFORMATION,
     utility=pyspiel.GameType.Utility.ZERO_SUM,
-    reward_model=pyspiel.GameType.RewardModel.REWARDS,
+    reward_model=pyspiel.GameType.RewardModel.TERMINAL,
     max_num_players=_NUM_PLAYERS,
     min_num_players=_NUM_PLAYERS,
     provides_information_state_string=True,
@@ -203,8 +203,8 @@ class TTState(pyspiel.State):
 
   def returns(self):
     """Total reward for each player over the course of the game so far."""
-    points_0 = self.score[0]//3 + self.score[0]*0.01
-    points_1 = self.score[1]//3 + self.score[1]*0.01
+    points_0 = self.score[0]//3 #+ self.score[0]*0.01
+    points_1 = self.score[1]//3 #+ self.score[1]*0.01
     return [points_0-points_1, points_1-points_0]
 
   def __str__(self):
@@ -224,14 +224,14 @@ class TTObserver:
     pieces = [("player", 2, (2,)), ("round", 1, (1,))]
     if iig_obs_type.private_info == pyspiel.PrivateInfoType.SINGLE_PLAYER:
       pieces.append(("private_titans", MAX_TITANS * len(TITAN_IDS), (MAX_TITANS, len(TITAN_IDS))))
-      pieces.append(("private_tiles", MAX_TITANS * len(NUM_TILES), (MAX_TITANS, len(NUM_TILES))))
+      pieces.append(("private_tiles", MAX_TITANS * NUM_TILES, (MAX_TITANS, NUM_TILES)))
     if iig_obs_type.public_info:
       if iig_obs_type.perfect_recall:
         pieces.append(("actions", _MAX_GAME_LENGTH*_NUM_ACTIONS, (_MAX_GAME_LENGTH, _NUM_ACTIONS)))
       else:
         pieces.append(("score", 2, (2,)))
         pieces.append(("public_titans", MAX_TITANS * len(TITAN_IDS) * 2, (MAX_TITANS, len(TITAN_IDS), 2)))
-        pieces.append(("public_tiles", MAX_TITANS * len(NUM_TILES) * 2, (MAX_TITANS, len(NUM_TILES), 2)))
+        pieces.append(("public_tiles", MAX_TITANS * NUM_TILES * 2, (MAX_TITANS, NUM_TILES, 2)))
 
     # Build the single flat tensor.
     total_size = sum(size for name, size, shape in pieces)
