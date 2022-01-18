@@ -21,7 +21,7 @@ from absl import flags
 from open_spiel.python.algorithms.alpha_zero import alpha_zero
 from open_spiel.python.algorithms.alpha_zero import model as model_lib
 from open_spiel.python.utils import spawn
-from open_spiel.python.games import tt
+from open_spiel.python.games import *
 
 flags.DEFINE_string("game", "tt", "Name of the game.")
 flags.DEFINE_integer("uct_c", 2, "UCT's exploration constant.")
@@ -39,7 +39,7 @@ flags.DEFINE_float("temperature", 1,
                    "Temperature for final move selection.")
 flags.DEFINE_integer("temperature_drop", 10,  # Less than AZ due to short games.
                      "Drop the temperature to 0 after this many moves.")
-flags.DEFINE_enum("nn_model", "resnet", model_lib.Model.valid_model_types,
+flags.DEFINE_enum("nn_model", "mlp", model_lib.Model.valid_model_types,
                   "What type of model should be used?.")
 flags.DEFINE_integer("nn_width", 2 ** 7, "How wide should the network be.")
 flags.DEFINE_integer("nn_depth", 10, "How deep should the network be.")
