@@ -37,7 +37,7 @@ flags.DEFINE_float("policy_epsilon", 0.25, "What noise epsilon to use.")
 flags.DEFINE_float("policy_alpha", 1, "What dirichlet noise alpha to use.")
 flags.DEFINE_float("temperature", 1,
                    "Temperature for final move selection.")
-flags.DEFINE_integer("temperature_drop", 10,  # Less than AZ due to short games.
+flags.DEFINE_integer("temperature_drop", 6,  # Less than AZ due to short games.
                      "Drop the temperature to 0 after this many moves.")
 flags.DEFINE_enum("nn_model", "mlp", model_lib.Model.valid_model_types,
                   "What type of model should be used?.")
