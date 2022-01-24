@@ -209,8 +209,17 @@ class TTState(pyspiel.State):
 
   def __str__(self):
     """String for debug purposes. No particular semantics are required."""
-    return "TODO debug str"
-
+    """Observation of `state` from the PoV of `player`, as a string."""
+    pieces = []
+    pieces.append(f"round {self.round}")
+    pieces.append(f"score {self.score}")
+    for cur_player in range(2):
+      titans = self.titans[cur_player][:len(self.last_tiles[cur_player])]
+      titans = [f"{TITAN_ID_TO_NAME[TITAN_IDS[tindex]]}({TITAN_IDS[tindex]})" for tindex in titans]
+      pieces.append(f"public titans p{cur_player} {titans}")
+    for cur_player in range(2):
+      pieces.append(f"private tiles p{cur_player} {self.last_tiles[cur_player]}")
+    return "\n".join(pieces)
 
 class TTObserver:
   """Observer, conforming to the PyObserver interface (see observation.py)."""
@@ -263,11 +272,11 @@ class TTObserver:
     if "public_titans" in self.dict:
       for cur_player in range(2):
         for i, titan in enumerate(state.titans[cur_player][:len(state.last_tiles[cur_player])]):
-          self.dict["private_titans"][i][titan][cur_player] = 1
+          self.dict["public_titans"][i][titan][cur_player] = 1
     if "public_tiles" in self.dict:
       for cur_player in range(2):
         for i, tile in enumerate(state.last_tiles[cur_player]):
-          self.dict["private_titans"][i][tile][cur_player] = 1
+          self.dict["public_tiles"][i][tile][cur_player] = 1
     if "actions" in self.dict:
       for turn, action in enumerate(state.actions):
         self.dict["actions"][turn, action] = 1
@@ -290,7 +299,7 @@ class TTObserver:
         pieces.append(f"public titans p{cur_player} {state.titans[cur_player][:len(state.last_tiles[cur_player])]}")
     if "public_tiles" in self.dict:
       for cur_player in range(2):
-        pieces.append(f"private tiles p{cur_player} {state.last_tiles[player]}")
+        pieces.append(f"private tiles p{cur_player} {state.last_tiles[cur_player]}")
     if "actions" in self.dict:
         pieces.append(f"action history {self.dict['actions']}")
 

@@ -1,0 +1,5 @@
+[2022-01-24 00:50:20.189] learner started
+[2022-01-24 00:50:20.189] Initializing model
+[2022-01-24 00:50:21.422] Model type: mlp(128, 10)
+[2022-01-24 00:50:21.422] Model size: 318474 variables
+[2022-01-24 00:50:21.534] Initial checkpoint: ./save/checkpoint-0

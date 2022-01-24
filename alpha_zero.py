@@ -43,7 +43,7 @@ flags.DEFINE_enum("nn_model", "mlp", model_lib.Model.valid_model_types,
                   "What type of model should be used?.")
 flags.DEFINE_integer("nn_width", 2 ** 7, "How wide should the network be.")
 flags.DEFINE_integer("nn_depth", 10, "How deep should the network be.")
-flags.DEFINE_string("path", None, "Where to save checkpoints.")
+flags.DEFINE_string("path", "./save", "Where to save checkpoints.")
 flags.DEFINE_integer("checkpoint_freq", 100, "Save a checkpoint every N steps.")
 flags.DEFINE_integer("actors", 2, "How many actors to run.")
 flags.DEFINE_integer("evaluators", 1, "How many evaluators to run.")
