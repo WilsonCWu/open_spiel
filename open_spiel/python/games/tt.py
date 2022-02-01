@@ -36,11 +36,11 @@ from open_spiel.python.games.tt_utils import *
 
 _NUM_PLAYERS = 2
 _NUM_ACTIONS = (len(TITAN_IDS) + NUM_TILES)*MAX_TITANS
-_MAX_GAME_LENGTH = 54
-# r1: (3 titans + 3 tiles) * 2 players
-# r2: (1 titan + 4 tiles) * 2 players
-# r3: (1 titan + 5 tiles) * 2 players
-# r4: (5 tiles) * 2 players
+_MAX_GAME_LENGTH = 48
+# r1: (2 titans + 2 tiles) * 2 players
+# r2: (1 titan + 3 tiles) * 2 players
+# r3: (1 titan + 4 tiles) * 2 players
+# r4: (1 titan + 5 tiles) * 2 players
 # r5: (5 tiles) * 2 players
 _GAME_TYPE = pyspiel.GameType(
     short_name="tt",
@@ -100,7 +100,7 @@ class TTState(pyspiel.State):
     self._game_over = False
 
   def _cur_max_titans(self):
-    return min(self.round+3, MAX_TITANS)
+    return min(self.round+2, MAX_TITANS)
 
   # OpenSpiel (PySpiel) API functions are below. This is the standard set that
   # should be implemented by every sequential-move game with chance.
@@ -203,8 +203,8 @@ class TTState(pyspiel.State):
 
   def returns(self):
     """Total reward for each player over the course of the game so far."""
-    points_0 = self.score[0]//3 #+ self.score[0]*0.01
-    points_1 = self.score[1]//3 #+ self.score[1]*0.01
+    points_0 = self.score[0]//3 + self.score[0]*0.01
+    points_1 = self.score[1]//3 + self.score[1]*0.01
     return [points_0-points_1, points_1-points_0]
 
   def __str__(self):

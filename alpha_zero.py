@@ -25,7 +25,7 @@ from open_spiel.python.games import *
 
 flags.DEFINE_string("game", "tt", "Name of the game.")
 flags.DEFINE_integer("uct_c", 2, "UCT's exploration constant.")
-flags.DEFINE_integer("max_simulations", 300, "How many simulations to run.")
+flags.DEFINE_integer("max_simulations", 50, "How many simulations to run.")
 flags.DEFINE_integer("train_batch_size", 2 ** 10, "Batch size for learning.")
 flags.DEFINE_integer("replay_buffer_size", 2 ** 16,
                      "How many states to store in the replay buffer.")
@@ -50,12 +50,12 @@ flags.DEFINE_integer("evaluators", 1, "How many evaluators to run.")
 flags.DEFINE_integer("evaluation_window", 100,
                      "How many games to average results over.")
 flags.DEFINE_integer(
-    "eval_levels", 7,
+    "eval_levels", 5,
     ("Play evaluation games vs MCTS+Solver, with max_simulations*10^(n/2)"
      " simulations for n in range(eval_levels). Default of 7 means "
      "running mcts with up to 1000 times more simulations."))
 flags.DEFINE_integer("max_steps", 0, "How many learn steps before exiting.")
-flags.DEFINE_bool("quiet", True, "Don't show the moves as they're played.")
+flags.DEFINE_bool("quiet", False, "Don't show the moves as they're played.")
 flags.DEFINE_bool("verbose", False, "Show the MCTS stats of possible moves.")
 
 FLAGS = flags.FLAGS
