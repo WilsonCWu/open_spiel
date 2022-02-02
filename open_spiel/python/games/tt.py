@@ -214,11 +214,11 @@ class TTState(pyspiel.State):
     pieces.append(f"round {self.round}")
     pieces.append(f"score {self.score}")
     for cur_player in range(2):
-      titans = self.titans[cur_player][:len(self.last_tiles[cur_player])]
+      titans = self.titans[cur_player][:len(self.tiles[cur_player])]
       titans = [f"{TITAN_ID_TO_NAME[TITAN_IDS[tindex]]}({TITAN_IDS[tindex]})" for tindex in titans]
-      pieces.append(f"public titans p{cur_player} {titans}")
+      pieces.append(f"private titans p{cur_player} {titans}")
     for cur_player in range(2):
-      pieces.append(f"private tiles p{cur_player} {self.last_tiles[cur_player]}")
+      pieces.append(f"private tiles p{cur_player} {self.tiles[cur_player]}")
     return "\n".join(pieces)
 
 class TTObserver:
