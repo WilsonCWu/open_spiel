@@ -44,13 +44,13 @@ flags.DEFINE_enum("nn_model", "mlp", model_lib.Model.valid_model_types,
 flags.DEFINE_integer("nn_width", 2 ** 7, "How wide should the network be.")
 flags.DEFINE_integer("nn_depth", 10, "How deep should the network be.")
 flags.DEFINE_string("path", "./save", "Where to save checkpoints.")
-flags.DEFINE_integer("checkpoint_freq", 10, "Save a checkpoint every N steps.")
-flags.DEFINE_integer("actors", 2, "How many actors to run.")
-flags.DEFINE_integer("evaluators", 1, "How many evaluators to run.")
+flags.DEFINE_integer("checkpoint_freq", 5, "Save a checkpoint every N steps.")
+flags.DEFINE_integer("actors", 4, "How many actors to run.")
+flags.DEFINE_integer("evaluators", 2, "How many evaluators to run.")
 flags.DEFINE_integer("evaluation_window", 50,
                      "How many games to average results over.")
 flags.DEFINE_integer(
-    "eval_levels", 4,
+    "eval_levels", 6,
     ("Play evaluation games vs MCTS+Solver, with max_simulations*10^(n/2)"
      " simulations for n in range(eval_levels). Default of 7 means "
      "running mcts with up to 1000 times more simulations."))

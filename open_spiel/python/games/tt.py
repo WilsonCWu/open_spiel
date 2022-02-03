@@ -143,13 +143,11 @@ class TTState(pyspiel.State):
     assert False, "not implemented"
     return 0
 
-  def _apply_action(self, action):
-    """Applies the specified action to the state."""
-    if self.is_chance_node():
-      assert False, "Not Implemented"
-      return
-    else:
-      self.actions.append(action)
+  # either apply next titan slot, or placement slot
+  def _parse_action(self, action):
+    next_titan = None
+    next_tile = None
+
     my_titans = self.titans[self._next_player]
     my_tiles = self.tiles[self._next_player]
     base_tile_index = MAX_TITANS*len(TITAN_IDS)
@@ -158,12 +156,30 @@ class TTState(pyspiel.State):
       assert len(my_titans) < self._cur_max_titans()
       titan_slot = action//len(TITAN_IDS)
       assert titan_slot == len(my_titans)
-      my_titans.append(action % len(TITAN_IDS))
+      next_titan = action % len(TITAN_IDS)
     else:  # set tile
       assert len(my_tiles) < len(my_titans)
       tile_slot = (action-base_tile_index)//NUM_TILES
       assert tile_slot == len(my_tiles)
-      my_tiles.append((action-base_tile_index) % NUM_TILES)
+      next_tile = (action-base_tile_index) % NUM_TILES
+
+    return next_titan, next_tile
+
+  def _apply_action(self, action):
+    """Applies the specified action to the state."""
+    if self.is_chance_node():
+      assert False, "Not Implemented"
+      return
+    else:
+      self.actions.append(action)
+
+    my_titans = self.titans[self._next_player]
+    my_tiles = self.tiles[self._next_player]
+    next_titan, next_tile = self._parse_action(action)
+    if next_titan is not None:
+      my_titans.append(next_titan)
+    else:
+      my_tiles.append(next_tile)
 
     # self round placement still incomplete
     if len(my_titans) < self._cur_max_titans() or len(my_tiles) < len(my_titans):
@@ -195,7 +211,13 @@ class TTState(pyspiel.State):
 
   def _action_to_string(self, player, action):
     """Action -> string."""
-    return f"{player}: {action}"
+    # TODO: toname and totile functions
+    next_titan, next_tile = self._parse_action(action)
+    if next_titan is not None:
+      cmd = TITAN_ID_TO_NAME[TITAN_IDS[next_titan]]
+    else:
+      cmd = next_tile+1
+    return f"{player}({cmd})"
 
   def is_terminal(self):
     """Returns True if the game is over."""
