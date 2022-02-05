@@ -1,0 +1,12 @@
+[2022-02-01 16:37:39.463] learner started
+[2022-02-01 16:37:39.463] Initializing model
+[2022-02-01 16:37:44.272] Model type: resnet(128, 10)
+[2022-02-01 16:37:44.274] Model size: 2968461 variables
+[2022-02-01 16:37:45.375] Initial checkpoint: ./savetictactoe/checkpoint-0
+[2022-02-01 17:43:49.438] Step: 1
+[2022-02-01 17:43:49.438] Collected 21859 states from 843 games, 5.4 states/s. 2.7 states/(s*actor), game length: 25.9
+[2022-02-01 17:43:49.438] Buffer size: 21859. States seen: 21859
+[2022-02-01 17:44:11.140] Losses(total: 3.061, policy: 1.868, value: 0.926, l2: 0.268)
+[2022-02-01 17:44:11.140] Checkpoint saved: ./savetictactoe/checkpoint--1
+[2022-02-01 17:44:11.149]
+[2022-02-01 17:49:59.765] learner exiting

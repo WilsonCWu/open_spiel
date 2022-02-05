@@ -1,0 +1,118 @@
+[2022-02-01 16:37:39.464] evaluator-0 started
+[2022-02-01 16:37:39.464] Initializing model
+[2022-02-01 16:37:43.684] Initializing bots
+[2022-02-01 16:37:48.188] Game 0: Returns: -1.0 1.0; Actions: x5 o3 x5 o5 x5 o2 x5 o1 x4 o0
+[2022-02-01 16:37:48.189] AZ: -1.0, MCTS: 1.0, AZ avg/1: -1.000
+[2022-02-01 16:37:48.189] Inference cache: CacheInfo(hits=574, misses=976, size=976, max_size=65536)
+[2022-02-01 16:37:48.189] Loading checkpoint ./savetictactoe/checkpoint-0
+[2022-02-01 16:37:53.525] Game 1: Returns: 1.0 -1.0; Actions: x3 o0 x3 o0 x3 o3 x0 o0 x4 o1 x5 o0 x2
+[2022-02-01 16:37:53.525] AZ: -1.0, MCTS: 1.0, AZ avg/2: -1.000
+[2022-02-01 16:37:58.012] Game 2: Returns: -1.0 1.0; Actions: x0 o3 x0 o0 x0 o4 x0 o5 x0 o2
+[2022-02-01 16:37:58.012] AZ: -1.0, MCTS: 1.0, AZ avg/3: -1.000
+[2022-02-01 16:37:59.715] Game 3: Returns: 1.0 -1.0; Actions: x3 o0 x4 o0 x2 o0 x5
+[2022-02-01 16:37:59.715] AZ: -1.0, MCTS: 1.0, AZ avg/4: -1.000
+[2022-02-01 16:38:04.304] Game 4: Returns: -1.0 1.0; Actions: x0 o3 x0 o4 x0 o0 x0 o2 x1 o5
+[2022-02-01 16:38:04.304] AZ: -1.0, MCTS: 1.0, AZ avg/5: -1.000
+[2022-02-01 16:38:06.689] Game 5: Returns: 1.0 -1.0; Actions: x3 o0 x4 o0 x5 o0 x6
+[2022-02-01 16:38:06.689] AZ: -1.0, MCTS: 1.0, AZ avg/6: -1.000
+[2022-02-01 16:38:21.183] Game 6: Returns: -1.0 1.0; Actions: x0 o3 x0 o3 x0 o0 x0 o4 x0 o5 x6 o2
+[2022-02-01 16:38:21.183] AZ: -1.0, MCTS: 1.0, AZ avg/7: -1.000
+[2022-02-01 16:38:34.870] Game 7: Returns: 1.0 -1.0; Actions: x3 o0 x3 o0 x4 o0 x0 o0 x2 o0 x1
+[2022-02-01 16:38:34.871] AZ: -1.0, MCTS: 1.0, AZ avg/8: -1.000
+[2022-02-01 16:39:13.995] Game 8: Returns: -1.0 1.0; Actions: x0 o3 x0 o3 x0 o0 x0 o4 x0 o2 x5 o1
+[2022-02-01 16:39:13.995] AZ: -1.0, MCTS: 1.0, AZ avg/9: -1.000
+[2022-02-01 16:39:54.960] Game 9: Returns: 1.0 -1.0; Actions: x3 o0 x3 o0 x0 o0 x4 o0 x2 o0 x5
+[2022-02-01 16:39:54.960] AZ: -1.0, MCTS: 1.0, AZ avg/10: -1.000
+[2022-02-01 16:42:02.724] Game 10: Returns: -1.0 1.0; Actions: x0 o3 x0 o3 x0 o0 x0 o4 x0 o5 x6 o2
+[2022-02-01 16:42:02.724] AZ: -1.0, MCTS: 1.0, AZ avg/11: -1.000
+[2022-02-01 16:44:12.774] Game 11: Returns: 1.0 -1.0; Actions: x3 o0 x3 o0 x0 o0 x4 o0 x5 o0 x6
+[2022-02-01 16:44:12.775] AZ: -1.0, MCTS: 1.0, AZ avg/12: -1.000
+[2022-02-01 16:50:31.786] Game 12: Returns: -1.0 1.0; Actions: x0 o3 x0 o3 x0 o0 x0 o4 x0 o2 x5 o1
+[2022-02-01 16:50:31.786] AZ: -1.0, MCTS: 1.0, AZ avg/13: -1.000
+[2022-02-01 16:57:28.679] Game 13: Returns: 1.0 -1.0; Actions: x3 o0 x3 o0 x0 o0 x4 o0 x2 o0 x1
+[2022-02-01 16:57:28.680] AZ: -1.0, MCTS: 1.0, AZ avg/14: -1.000
+[2022-02-01 16:57:33.571] Game 14: Returns: -1.0 1.0; Actions: x0 o1 x0 o3 x0 o0 x0 o4 x2 o2 x5 o3 x5 o4 x0 o1
+[2022-02-01 16:57:33.571] AZ: -1.0, MCTS: 1.0, AZ avg/15: -1.000
+[2022-02-01 16:57:39.736] Game 15: Returns: 1.0 -1.0; Actions: x4 o0 x1 o0 x3 o2 x6 o5 x4 o0 x0 o0 x6 o0 x3 o5 x2 o2 x1
+[2022-02-01 16:57:39.736] AZ: -1.0, MCTS: 1.0, AZ avg/16: -1.000
+[2022-02-01 16:57:40.999] Game 16: Returns: -1.0 1.0; Actions: x0 o3 x0 o4 x0 o0 x0 o5 x0 o6
+[2022-02-01 16:57:40.999] AZ: -1.0, MCTS: 1.0, AZ avg/17: -1.000
+[2022-02-01 16:57:41.783] Game 17: Returns: 1.0 -1.0; Actions: x3 o0 x4 o0 x2 o0 x1
+[2022-02-01 16:57:41.783] AZ: -1.0, MCTS: 1.0, AZ avg/18: -1.000
+[2022-02-01 16:57:44.909] Game 18: Returns: -1.0 1.0; Actions: x0 o3 x0 o4 x0 o0 x0 o5 x0 o6
+[2022-02-01 16:57:44.909] AZ: -1.0, MCTS: 1.0, AZ avg/19: -1.000
+[2022-02-01 16:57:47.116] Game 19: Returns: 1.0 -1.0; Actions: x3 o0 x4 o0 x5 o0 x2
+[2022-02-01 16:57:47.116] AZ: -1.0, MCTS: 1.0, AZ avg/20: -1.000
+[2022-02-01 16:58:01.234] Game 20: Returns: -1.0 1.0; Actions: x0 o3 x0 o0 x0 o3 x0 o4 x0 o5 x6 o2
+[2022-02-01 16:58:01.234] AZ: -1.0, MCTS: 1.0, AZ avg/21: -1.000
+[2022-02-01 16:58:13.669] Game 21: Returns: 1.0 -1.0; Actions: x3 o0 x3 o0 x0 o0 x4 o0 x5 o0 x2
+[2022-02-01 16:58:13.669] AZ: -1.0, MCTS: 1.0, AZ avg/22: -1.000
+[2022-02-01 16:58:43.984] Game 22: Returns: -1.0 1.0; Actions: x0 o3 x0 o4 x0 o0 x0 o5 x0 o6
+[2022-02-01 16:58:43.984] AZ: -1.0, MCTS: 1.0, AZ avg/23: -1.000
+[2022-02-01 16:59:22.957] Game 23: Returns: 1.0 -1.0; Actions: x3 o0 x3 o0 x0 o0 x4 o0 x2 o0 x1
+[2022-02-01 16:59:22.958] AZ: -1.0, MCTS: 1.0, AZ avg/24: -1.000
+[2022-02-01 17:01:29.933] Game 24: Returns: -1.0 1.0; Actions: x0 o3 x0 o3 x0 o0 x0 o4 x0 o5 x6 o2
+[2022-02-01 17:01:29.933] AZ: -1.0, MCTS: 1.0, AZ avg/25: -1.000
+[2022-02-01 17:03:37.666] Game 25: Returns: 1.0 -1.0; Actions: x3 o0 x3 o0 x0 o0 x4 o0 x2 o0 x5
+[2022-02-01 17:03:37.666] AZ: -1.0, MCTS: 1.0, AZ avg/26: -1.000
+[2022-02-01 17:10:24.241] Game 26: Returns: -1.0 1.0; Actions: x0 o3 x0 o3 x0 o0 x0 o4 x0 o2 x5 o1
+[2022-02-01 17:10:24.241] AZ: -1.0, MCTS: 1.0, AZ avg/27: -1.000
+[2022-02-01 17:17:30.114] Game 27: Returns: 1.0 -1.0; Actions: x3 o0 x3 o0 x0 o0 x4 o0 x2 o0 x1
+[2022-02-01 17:17:30.115] AZ: -1.0, MCTS: 1.0, AZ avg/28: -1.000
+[2022-02-01 17:17:32.546] Game 28: Returns: -1.0 1.0; Actions: x0 o2 x0 o4 x0 o0 x0 o3 x1 o5
+[2022-02-01 17:17:32.547] AZ: -1.0, MCTS: 1.0, AZ avg/29: -1.000
+[2022-02-01 17:17:34.219] Game 29: Returns: 1.0 -1.0; Actions: x2 o0 x3 o0 x4 o0 x1
+[2022-02-01 17:17:34.219] AZ: -1.0, MCTS: 1.0, AZ avg/30: -1.000
+[2022-02-01 17:17:36.354] Game 30: Returns: -1.0 1.0; Actions: x0 o2 x0 o3 x0 o0 x0 o4 x1 o5
+[2022-02-01 17:17:36.354] AZ: -1.0, MCTS: 1.0, AZ avg/31: -1.000
+[2022-02-01 17:17:37.129] Game 31: Returns: 1.0 -1.0; Actions: x3 o0 x4 o0 x5 o0 x2
+[2022-02-01 17:17:37.129] AZ: -1.0, MCTS: 1.0, AZ avg/32: -1.000
+[2022-02-01 17:17:40.354] Game 32: Returns: -1.0 1.0; Actions: x0 o3 x0 o0 x0 o4 x0 o5 x0 o2
+[2022-02-01 17:17:40.355] AZ: -1.0, MCTS: 1.0, AZ avg/33: -1.000
+[2022-02-01 17:17:42.606] Game 33: Returns: 1.0 -1.0; Actions: x3 o0 x4 o0 x5 o0 x6
+[2022-02-01 17:17:42.606] AZ: -1.0, MCTS: 1.0, AZ avg/34: -1.000
+[2022-02-01 17:17:55.090] Game 34: Returns: -1.0 1.0; Actions: x0 o3 x0 o3 x0 o0 x0 o4 x0 o5 x6 o2
+[2022-02-01 17:17:55.090] AZ: -1.0, MCTS: 1.0, AZ avg/35: -1.000
+[2022-02-01 17:18:07.766] Game 35: Returns: 1.0 -1.0; Actions: x3 o0 x3 o0 x0 o0 x4 o0 x2 o0 x5
+[2022-02-01 17:18:07.766] AZ: -1.0, MCTS: 1.0, AZ avg/36: -1.000
+[2022-02-01 17:18:48.568] Game 36: Returns: -1.0 1.0; Actions: x0 o3 x0 o0 x0 o3 x0 o4 x0 o2 x1 o5
+[2022-02-01 17:18:48.568] AZ: -1.0, MCTS: 1.0, AZ avg/37: -1.000
+[2022-02-01 17:19:28.475] Game 37: Returns: 1.0 -1.0; Actions: x3 o0 x3 o0 x0 o0 x4 o0 x5 o0 x2
+[2022-02-01 17:19:28.475] AZ: -1.0, MCTS: 1.0, AZ avg/38: -1.000
+[2022-02-01 17:21:41.683] Game 38: Returns: -1.0 1.0; Actions: x0 o3 x0 o3 x0 o0 x0 o4 x0 o5 x6 o2
+[2022-02-01 17:21:41.684] AZ: -1.0, MCTS: 1.0, AZ avg/39: -1.000
+[2022-02-01 17:22:50.287] Game 39: Returns: 1.0 -1.0; Actions: x3 o0 x4 o0 x2 o0 x1
+[2022-02-01 17:22:50.287] AZ: -1.0, MCTS: 1.0, AZ avg/40: -1.000
+[2022-02-01 17:29:41.921] Game 40: Returns: -1.0 1.0; Actions: x0 o3 x0 o3 x0 o0 x0 o4 x0 o5 x6 o2
+[2022-02-01 17:29:41.922] AZ: -1.0, MCTS: 1.0, AZ avg/41: -1.000
+[2022-02-01 17:36:34.099] Game 41: Returns: 1.0 -1.0; Actions: x3 o0 x3 o0 x0 o0 x4 o0 x5 o0 x2
+[2022-02-01 17:36:34.100] AZ: -1.0, MCTS: 1.0, AZ avg/42: -1.000
+[2022-02-01 17:36:34.652] Game 42: Returns: -1.0 1.0; Actions: x0 o3 x0 o0 x0 o4 x0 o5 x0 o6
+[2022-02-01 17:36:34.653] AZ: -1.0, MCTS: 1.0, AZ avg/43: -1.000
+[2022-02-01 17:36:35.019] Game 43: Returns: 1.0 -1.0; Actions: x3 o0 x4 o0 x5 o0 x6
+[2022-02-01 17:36:35.019] AZ: -1.0, MCTS: 1.0, AZ avg/44: -1.000
+[2022-02-01 17:36:36.190] Game 44: Returns: -1.0 1.0; Actions: x0 o3 x0 o4 x0 o0 x0 o5 x0 o2
+[2022-02-01 17:36:36.190] AZ: -1.0, MCTS: 1.0, AZ avg/45: -1.000
+[2022-02-01 17:36:36.941] Game 45: Returns: 1.0 -1.0; Actions: x3 o0 x4 o0 x5 o0 x6
+[2022-02-01 17:36:36.941] AZ: -1.0, MCTS: 1.0, AZ avg/46: -1.000
+[2022-02-01 17:36:40.057] Game 46: Returns: -1.0 1.0; Actions: x0 o3 x0 o4 x0 o0 x0 o2 x1 o5
+[2022-02-01 17:36:40.057] AZ: -1.0, MCTS: 1.0, AZ avg/47: -1.000
+[2022-02-01 17:36:42.251] Game 47: Returns: 1.0 -1.0; Actions: x3 o0 x4 o0 x5 o0 x2
+[2022-02-01 17:36:42.251] AZ: -1.0, MCTS: 1.0, AZ avg/48: -1.000
+[2022-02-01 17:36:54.498] Game 48: Returns: -1.0 1.0; Actions: x0 o3 x0 o3 x0 o0 x0 o4 x0 o2 x5 o1
+[2022-02-01 17:36:54.498] AZ: -1.0, MCTS: 1.0, AZ avg/49: -1.000
+[2022-02-01 17:37:01.098] Game 49: Returns: 1.0 -1.0; Actions: x3 o0 x4 o0 x2 o0 x5
+[2022-02-01 17:37:01.098] AZ: -1.0, MCTS: 1.0, AZ avg/50: -1.000
+[2022-02-01 17:37:40.196] Game 50: Returns: -1.0 1.0; Actions: x0 o3 x0 o3 x0 o0 x0 o4 x0 o5 x6 o2
+[2022-02-01 17:37:40.196] AZ: -1.0, MCTS: 1.0, AZ avg/51: -1.000
+[2022-02-01 17:38:19.563] Game 51: Returns: 1.0 -1.0; Actions: x3 o0 x3 o0 x0 o0 x4 o0 x5 o0 x2
+[2022-02-01 17:38:19.564] AZ: -1.0, MCTS: 1.0, AZ avg/52: -1.000
+[2022-02-01 17:40:25.314] Game 52: Returns: -1.0 1.0; Actions: x0 o3 x0 o3 x0 o0 x0 o4 x0 o2 x5 o1
+[2022-02-01 17:40:25.314] AZ: -1.0, MCTS: 1.0, AZ avg/53: -1.000
+[2022-02-01 17:41:32.049] Game 53: Returns: 1.0 -1.0; Actions: x3 o0 x4 o0 x5 o0 x2
+[2022-02-01 17:41:32.050] AZ: -1.0, MCTS: 1.0, AZ avg/54: -1.000
+[2022-02-01 17:47:59.901] Game 54: Returns: -1.0 1.0; Actions: x0 o3 x0 o3 x0 o0 x0 o4 x0 o5 x6 o2
+[2022-02-01 17:47:59.901] AZ: -1.0, MCTS: 1.0, AZ avg/55: -1.000
+[2022-02-01 17:47:59.901] Inference cache: CacheInfo(hits=79084, misses=8659, size=8659, max_size=65536)
+[2022-02-01 17:47:59.901] Loading checkpoint ./savetictactoe/checkpoint--1
+[2022-02-01 17:49:59.765] evaluator-0 exiting

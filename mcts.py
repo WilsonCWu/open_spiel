@@ -64,7 +64,7 @@ flags.DEFINE_string("az_path", None,
                     "Path to an alpha_zero checkpoint. Needed by an az player.")
 flags.DEFINE_integer("uct_c", 2, "UCT's exploration constant.")
 flags.DEFINE_integer("rollout_count", 1, "How many rollouts to do.")
-flags.DEFINE_integer("max_simulations", 1000, "How many simulations to run.")
+flags.DEFINE_integer("max_simulations", 100, "How many simulations to run.")
 flags.DEFINE_integer("num_games", 1, "How many games to play.")
 flags.DEFINE_integer("seed", None, "Seed for the random number generator.")
 flags.DEFINE_bool("random_first", False, "Play the first move randomly.")

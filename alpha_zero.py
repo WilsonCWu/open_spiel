@@ -25,7 +25,7 @@ from open_spiel.python.games import *
 
 flags.DEFINE_string("game", "tt", "Name of the game.")
 flags.DEFINE_integer("uct_c", 2, "UCT's exploration constant.")
-flags.DEFINE_integer("max_simulations", 50, "How many simulations to run.")
+flags.DEFINE_integer("max_simulations", 100, "How many simulations to run.")
 flags.DEFINE_integer("train_batch_size", 2 ** 10, "Batch size for learning.")
 flags.DEFINE_integer("replay_buffer_size", 2 ** 16,
                      "How many states to store in the replay buffer.")
@@ -37,20 +37,20 @@ flags.DEFINE_float("policy_epsilon", 0.25, "What noise epsilon to use.")
 flags.DEFINE_float("policy_alpha", 1, "What dirichlet noise alpha to use.")
 flags.DEFINE_float("temperature", 1,
                    "Temperature for final move selection.")
-flags.DEFINE_integer("temperature_drop", 6,  # Less than AZ due to short games.
+flags.DEFINE_integer("temperature_drop", 8,  # Less than AZ due to short games.
                      "Drop the temperature to 0 after this many moves.")
 flags.DEFINE_enum("nn_model", "mlp", model_lib.Model.valid_model_types,
                   "What type of model should be used?.")
 flags.DEFINE_integer("nn_width", 2 ** 7, "How wide should the network be.")
 flags.DEFINE_integer("nn_depth", 10, "How deep should the network be.")
 flags.DEFINE_string("path", "./save", "Where to save checkpoints.")
-flags.DEFINE_integer("checkpoint_freq", 5, "Save a checkpoint every N steps.")
+flags.DEFINE_integer("checkpoint_freq", 3, "Save a checkpoint every N steps.")
 flags.DEFINE_integer("actors", 4, "How many actors to run.")
 flags.DEFINE_integer("evaluators", 2, "How many evaluators to run.")
 flags.DEFINE_integer("evaluation_window", 50,
                      "How many games to average results over.")
 flags.DEFINE_integer(
-    "eval_levels", 6,
+    "eval_levels", 7,
     ("Play evaluation games vs MCTS+Solver, with max_simulations*10^(n/2)"
      " simulations for n in range(eval_levels). Default of 7 means "
      "running mcts with up to 1000 times more simulations."))

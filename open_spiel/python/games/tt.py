@@ -236,7 +236,7 @@ class TTState(pyspiel.State):
     pieces.append(f"round {self.round}")
     pieces.append(f"score {self.score}")
     for cur_player in range(2):
-      titans = self.titans[cur_player][:len(self.tiles[cur_player])]
+      titans = self.titans[cur_player]
       titans = [f"{TITAN_ID_TO_NAME[TITAN_IDS[tindex]]}({TITAN_IDS[tindex]})" for tindex in titans]
       pieces.append(f"private titans p{cur_player} {titans}")
     for cur_player in range(2):
@@ -324,6 +324,7 @@ class TTObserver:
         pieces.append(f"private tiles p{cur_player} {state.last_tiles[cur_player]}")
     if "actions" in self.dict:
         pieces.append(f"action history {self.dict['actions']}")
+    return " ".join(str(p) for p in pieces)
 
 # Register the game with the OpenSpiel library
 
