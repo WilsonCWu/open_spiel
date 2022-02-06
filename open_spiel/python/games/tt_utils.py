@@ -4,11 +4,20 @@ import time
 import numpy as np
 import requests
 import json
+from typing import List
 from functools import lru_cache
+from dataclasses import dataclass
 import random
 import threading
 import os
 from flufl.lock import Lock
+
+def index_to_titan_name(titan_index):
+  return TITAN_ID_TO_NAME[TITAN_IDS[titan_index]]
+
+def index_to_tile(tile_index):
+  return tile_index+1
+
 # 22
 TITAN_IDS = [0, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 16, 17, 18, 19, 21, 23, 24, 26, 30, 31, 32, 33, 34, 35, 37, 38]
 TITAN_ID_TO_NAME = {
@@ -47,9 +56,18 @@ _losses = 0
 _started = 0
 _finished = 0
 _port = None
+NUM_TITANS = len(TITAN_IDS)
 NUM_TILES = 25
 MAX_TITANS = 5
 PLACEMENT_TEMPLATE = """[{"placement_id":1231,"pos_1":%s,"char_1":{"char_id":6000,"user":0,"char_type":%s,"level":%s,"prestige":%s,"copies":1,"hat":{"item_id":0,"user":0,"item_type":0,"exp":0},"armor":{"item_id":0,"user":0,"item_type":0,"exp":0},"weapon":{"item_id":0,"user":0,"item_type":0,"exp":0},"boots":{"item_id":0,"user":0,"item_type":0,"exp":0},"trinket_1":{"item_id":0,"user":0,"item_type":0,"exp":0},"trinket_2":{"item_id":0,"user":0,"item_type":0,"exp":0},"is_tourney":false},"pos_2":%s,"char_2":{"char_id":0,"user":0,"char_type":%s,"level":%s,"prestige":%s,"copies":0,"hat":{"item_id":0,"user":0,"item_type":0,"exp":0},"armor":{"item_id":0,"user":0,"item_type":0,"exp":0},"weapon":{"item_id":0,"user":0,"item_type":0,"exp":0},"boots":{"item_id":0,"user":0,"item_type":0,"exp":0},"trinket_1":{"item_id":0,"user":0,"item_type":0,"exp":0},"trinket_2":{"item_id":0,"user":0,"item_type":0,"exp":0},"is_tourney":false},"pos_3":%s,"char_3":{"char_id":0,"user":0,"char_type":%s,"level":%s,"prestige":%s,"copies":0,"hat":{"item_id":0,"user":0,"item_type":0,"exp":0},"armor":{"item_id":0,"user":0,"item_type":0,"exp":0},"weapon":{"item_id":0,"user":0,"item_type":0,"exp":0},"boots":{"item_id":0,"user":0,"item_type":0,"exp":0},"trinket_1":{"item_id":0,"user":0,"item_type":0,"exp":0},"trinket_2":{"item_id":0,"user":0,"item_type":0,"exp":0},"is_tourney":false},"pos_4":%s,"char_4":{"char_id":0,"user":0,"char_type":%s,"level":%s,"prestige":%s,"copies":0,"hat":{"item_id":0,"user":0,"item_type":0,"exp":0},"armor":{"item_id":0,"user":0,"item_type":0,"exp":0},"weapon":{"item_id":0,"user":0,"item_type":0,"exp":0},"boots":{"item_id":0,"user":0,"item_type":0,"exp":0},"trinket_1":{"item_id":0,"user":0,"item_type":0,"exp":0},"trinket_2":{"item_id":0,"user":0,"item_type":0,"exp":0},"is_tourney":false},"pos_5":%s,"char_5":{"char_id":0,"user":0,"char_type":%s,"level":%s,"prestige":%s,"copies":0,"hat":{"item_id":0,"user":0,"item_type":0,"exp":0},"armor":{"item_id":0,"user":0,"item_type":0,"exp":0},"weapon":{"item_id":0,"user":0,"item_type":0,"exp":0},"boots":{"item_id":0,"user":0,"item_type":0,"exp":0},"trinket_1":{"item_id":0,"user":0,"item_type":0,"exp":0},"trinket_2":{"item_id":0,"user":0,"item_type":0,"exp":0},"is_tourney":false}},{"placement_id":1233,"pos_1":%s,"char_1":{"char_id":6015,"user":0,"char_type":%s,"level":%s,"prestige":%s,"copies":0,"hat":{"item_id":0,"user":0,"item_type":0,"exp":0},"armor":{"item_id":0,"user":0,"item_type":0,"exp":0},"weapon":{"item_id":0,"user":0,"item_type":0,"exp":0},"boots":{"item_id":0,"user":0,"item_type":0,"exp":0},"trinket_1":{"item_id":0,"user":0,"item_type":0,"exp":0},"trinket_2":{"item_id":0,"user":0,"item_type":0,"exp":0},"is_tourney":false},"pos_2":%s,"char_2":{"char_id":6010,"user":0,"char_type":%s,"level":%s,"prestige":%s,"copies":2,"hat":{"item_id":0,"user":0,"item_type":0,"exp":0},"armor":{"item_id":0,"user":0,"item_type":0,"exp":0},"weapon":{"item_id":0,"user":0,"item_type":0,"exp":0},"boots":{"item_id":0,"user":0,"item_type":0,"exp":0},"trinket_1":{"item_id":0,"user":0,"item_type":0,"exp":0},"trinket_2":{"item_id":0,"user":0,"item_type":0,"exp":0},"is_tourney":false},"pos_3":%s,"char_3":{"char_id":6009,"user":0,"char_type":%s,"level":%s,"prestige":%s,"copies":1,"hat":{"item_id":0,"user":0,"item_type":0,"exp":0},"armor":{"item_id":0,"user":0,"item_type":0,"exp":0},"weapon":{"item_id":0,"user":0,"item_type":0,"exp":0},"boots":{"item_id":0,"user":0,"item_type":0,"exp":0},"trinket_1":{"item_id":0,"user":0,"item_type":0,"exp":0},"trinket_2":{"item_id":0,"user":0,"item_type":0,"exp":0},"is_tourney":false},"pos_4":%s,"char_4":{"char_id":0,"user":0,"char_type":%s,"level":%s,"prestige":%s,"copies":0,"hat":{"item_id":0,"user":0,"item_type":0,"exp":0},"armor":{"item_id":0,"user":0,"item_type":0,"exp":0},"weapon":{"item_id":0,"user":0,"item_type":0,"exp":0},"boots":{"item_id":0,"user":0,"item_type":0,"exp":0},"trinket_1":{"item_id":0,"user":0,"item_type":0,"exp":0},"trinket_2":{"item_id":0,"user":0,"item_type":0,"exp":0},"is_tourney":false},"pos_5":%s,"char_5":{"char_id":0,"user":0,"char_type":%s,"level":%s,"prestige":%s,"copies":0,"hat":{"item_id":0,"user":0,"item_type":0,"exp":0},"armor":{"item_id":0,"user":0,"item_type":0,"exp":0},"weapon":{"item_id":0,"user":0,"item_type":0,"exp":0},"boots":{"item_id":0,"user":0,"item_type":0,"exp":0},"trinket_1":{"item_id":0,"user":0,"item_type":0,"exp":0},"trinket_2":{"item_id":0,"user":0,"item_type":0,"exp":0},"is_tourney":false}}]"""
+
+@dataclass
+class TitanInfo:
+  index: int
+  tile_index: int = -1
+  prestige: int = 0
+  def __str__(self):
+    return f"{index_to_titan_name(self.index)}({TITAN_IDS[self.index]})\t{index_to_tile(self.tile_index)}"
 
 def _get_port():
   return "1233"
@@ -80,6 +98,19 @@ def create_placement_str(titan_indexes, tile_indexes):
       for _ in range(MAX_TITANS-len(titan_indexes[player])):
         formatData.extend([0, -1, 0, -1])
     return PLACEMENT_TEMPLATE % tuple(formatData)
+
+def check_server_win_tournament(titans):
+  titan_indexes = [[],[]]
+  tile_indexes = [[],[]]
+  for p in range(2):
+    for t in sorted(titans[p].titans.values(), key=lambda cur_t: cur_t.index):
+      if t.tile_index == -1:
+        continue
+      titan_indexes[p].append(t.index)
+      tile_indexes[p].append(t.tile_index)
+  print(titan_indexes)
+  print(tile_indexes)
+  return check_server_win(titan_indexes, tile_indexes)
 
 def check_server_win(titan_indexes, tile_indexes):
   global _wins
