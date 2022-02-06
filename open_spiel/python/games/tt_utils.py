@@ -70,7 +70,6 @@ class TitanInfo:
     return f"{index_to_titan_name(self.index)}({TITAN_IDS[self.index]})\t{index_to_tile(self.tile_index)}"
 
 def _get_port():
-  return "1233"
   global _port
   if _port:
     return _port
@@ -108,8 +107,8 @@ def check_server_win_tournament(titans):
         continue
       titan_indexes[p].append(t.index)
       tile_indexes[p].append(t.tile_index)
-  print(titan_indexes)
-  print(tile_indexes)
+  #print(titan_indexes)
+  #print(tile_indexes)
   return check_server_win(titan_indexes, tile_indexes)
 
 def check_server_win(titan_indexes, tile_indexes):
@@ -127,7 +126,7 @@ def check_server_win(titan_indexes, tile_indexes):
     _wins += 1
   else:
     _losses += 1
-  print(f"\n\nWins: {_wins} Losses: {_losses}\n\n")
+  #print(f"\n\nWins: {_wins} Losses: {_losses}\n\n")
   return is_win
 
 def check_server_win_cached(placementJsonStr):

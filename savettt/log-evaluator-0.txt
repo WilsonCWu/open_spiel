@@ -1,0 +1,4 @@
+[2022-02-06 02:39:19.303] evaluator-0 started
+[2022-02-06 02:39:19.303] Initializing model
+[2022-02-06 02:39:28.638] Initializing bots
+[2022-02-06 02:39:33.059] evaluator-0 exiting

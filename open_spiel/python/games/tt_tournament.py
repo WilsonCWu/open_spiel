@@ -32,6 +32,7 @@ import enum
 import numpy as np
 from copy import deepcopy
 import pyspiel
+from typing import Dict
 from open_spiel.python.games.tt_utils import *
 
 _NUM_PLAYERS = 2
@@ -93,7 +94,7 @@ class TTTGame(pyspiel.Game):
 
 class Titans:
   def __init__(self):
-    self.titans = {}
+    self.titans: Dict[int, TitanInfo] = {}
 
   def __str__(self):
     return "\n".join([str(self.titans[t]) for t in sorted(self.titans.keys())])
@@ -287,14 +288,58 @@ class TTTObserver:
 
   def __init__(self, iig_obs_type, params):
     """Initializes an empty observation tensor."""
+
     if params:
       raise ValueError(f"Observation parameters not supported; passed {params}")
+    assert (iig_obs_type.private_info == pyspiel.PrivateInfoType.SINGLE_PLAYER and iig_obs_type.public_info)
+
+    if iig_obs_type.perfect_recall:
+      self.tensor = np.zeros(_MAX_GAME_LENGTH*_NUM_ACTIONS, np.float32)
+      self.dict = {"actions": self.tensor.reshape((_MAX_GAME_LENGTH, _NUM_ACTIONS))}
+      return
+
+    self.tensor = np.zeros((3, NUM_TITANS, 6, 5), np.float32)
+    self.dict = {"data": self.tensor} # we do this bc az needs 3d matrix
+    self.set_dict = {
+      "private_titan_placement": self.tensor[0, :, :5, :],
+      "private_titan_is_picked": self.tensor[0, :, 5, 0],
+      "public_titan_placement": self.tensor[1:, :, :5, :],
+      "public_titan_is_picked": self.tensor[1:, :, :5, 0],
+      "player": self.tensor[0, :2, 5, 4],
+      "round": self.tensor[0, 2:3, 5, 4],
+      "score": self.tensor[0, 3:5, 5, 4]
+    }
 
   def set_from(self, state: TTTState, player):
     """Updates `tensor` and `dict` to reflect `state` from PoV of `player`."""
+    self.tensor.fill(0)
+    if "player" in self.set_dict:
+      self.set_dict["player"][player] = 1
+    if "round" in self.set_dict:
+      self.set_dict["round"][0] = state.round
+    if "score" in self.set_dict:
+      self.set_dict["score"][0] = state.score[0]
+      self.set_dict["score"][1] = state.score[1]
+    if "private_titan_placement" in self.set_dict:
+      for titan_info in state.titans[player].titans.values():
+        tile_index = titan_info.tile_index
+        if tile_index != -1:
+          self.set_dict["private_titan_placement"][titan_info.index][tile_index//5][tile_index % 5] = 1
+        self.set_dict["private_titan_is_picked"][titan_info.index] = 1
+    if "public_titan_placement" in self.set_dict:
+      for cur_player in range(_NUM_PLAYERS):
+        for titan_info in state.titans[cur_player].titans.values():
+          tile_index = titan_info.tile_index
+          if tile_index != -1:
+            self.set_dict["public_titan_placement"][cur_player][titan_info.index][tile_index//5][tile_index % 5] = 1
+          self.set_dict["public_titan_is_picked"][cur_player][titan_info.index] = 1
+    if "actions" in self.dict:
+      for turn, action in enumerate(state.actions):
+        self.dict["actions"][turn, action] = 1
 
   def string_from(self, state: TTTState, player):
     """Observation of `state` from the PoV of `player`, as a string."""
+    assert False
 
 # Register the game with the OpenSpiel library
 
