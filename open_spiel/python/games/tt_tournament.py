@@ -143,6 +143,7 @@ class TTTState(pyspiel.State):
     self.round = 0
     self.score = [0, 0]
     self.actions = []
+    self._removes_left = [1, 1]
     self._next_player = 0
     self._game_over = False
 
@@ -177,8 +178,9 @@ class TTTState(pyspiel.State):
           ret.append(titan_index*_NUM_ACTIONS_PER_TITAN+2+tile_index)
     if self.round == 5: # can remove on 5
       placed_titans = my_titans.placed_titans()
-      for titan_index in placed_titans:
-        ret.append(titan_index*_NUM_ACTIONS_PER_TITAN+1) # remove
+      if self._removes_left[player] > 0:
+        for titan_index in placed_titans:
+          ret.append(titan_index*_NUM_ACTIONS_PER_TITAN+1) # remove
       ret.append(PASS_ACTION) # pass
 
     return ret
@@ -206,8 +208,9 @@ class TTTState(pyspiel.State):
       if action_type == 0: # pick
         assert self.round == 0
         my_titans.pick_titan(titan_index)
-      elif action_type == 1:
+      elif action_type == 1: # remove
         my_titans.unplace_titan(titan_index)
+        self._removes_left[self._next_player] -= 1
       else:
         my_titans.place_titan(titan_index, action_type-2)
 
