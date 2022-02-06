@@ -181,7 +181,7 @@ class TTTState(pyspiel.State):
       if self._removes_left[player] > 0:
         for titan_index in placed_titans:
           ret.append(titan_index*_NUM_ACTIONS_PER_TITAN+1) # remove
-      ret.append(PASS_ACTION) # pass
+        ret.append(PASS_ACTION) # pass
 
     return ret
 
@@ -200,7 +200,6 @@ class TTTState(pyspiel.State):
       return
     else:
       self.actions.append(action)
-    self.titans_prev = deepcopy(self.titans)
     my_titans = self.titans[self._next_player]
     if action != PASS_ACTION:
       titan_index = action // _NUM_ACTIONS_PER_TITAN
@@ -215,6 +214,7 @@ class TTTState(pyspiel.State):
         my_titans.place_titan(titan_index, action_type-2)
 
     if self.round == 0:
+      self.titans_prev = deepcopy(self.titans)
       if my_titans.num_titans() == 8 and self._next_player == 1:
         self.round += 1
       self._next_player = 1-self._next_player
@@ -235,6 +235,9 @@ class TTTState(pyspiel.State):
       self.score[0] += 1
     else:
       self.score[1] += 1
+
+    # all info now public
+    self.titans_prev = deepcopy(self.titans)
 
     # if a round ended
     if self.score[0] != 3 and self.score[1] != 3:
@@ -301,13 +304,13 @@ class TTTObserver:
       self.dict = {"actions": self.tensor.reshape((_MAX_GAME_LENGTH, _NUM_ACTIONS))}
       return
 
-    self.tensor = np.zeros((3, NUM_TITANS, 6, 5), np.float32)
+    self.tensor = np.zeros((2, NUM_TITANS, 6, 5), np.float32)
     self.dict = {"data": self.tensor} # we do this bc az needs 3d matrix
     self.set_dict = {
       "private_titan_placement": self.tensor[0, :, :5, :],
       "private_titan_is_picked": self.tensor[0, :, 5, 0],
-      "public_titan_placement": self.tensor[1:, :, :5, :],
-      "public_titan_is_picked": self.tensor[1:, :, :5, 0],
+      "public_titan_placement_opponent": self.tensor[1, :, :5, :],
+      "public_titan_is_picked_opponent": self.tensor[1, :, :5, 0],
       "player": self.tensor[0, :2, 5, 4],
       "round": self.tensor[0, 2:3, 5, 4],
       "score": self.tensor[0, 3:5, 5, 4]
@@ -330,12 +333,11 @@ class TTTObserver:
           self.set_dict["private_titan_placement"][titan_info.index][tile_index//5][tile_index % 5] = 1
         self.set_dict["private_titan_is_picked"][titan_info.index] = 1
     if "public_titan_placement" in self.set_dict:
-      for cur_player in range(_NUM_PLAYERS):
-        for titan_info in state.titans[cur_player].titans.values():
-          tile_index = titan_info.tile_index
-          if tile_index != -1:
-            self.set_dict["public_titan_placement"][cur_player][titan_info.index][tile_index//5][tile_index % 5] = 1
-          self.set_dict["public_titan_is_picked"][cur_player][titan_info.index] = 1
+      for titan_info in state.titans_prev[1-player].titans.values():
+        tile_index = titan_info.tile_index
+        if tile_index != -1:
+          self.set_dict["public_titan_placement_opponent"][titan_info.index][tile_index//5][tile_index % 5] = 1
+        self.set_dict["public_titan_is_picked_opponent"][titan_info.index] = 1
     if "actions" in self.dict:
       for turn, action in enumerate(state.actions):
         self.dict["actions"][turn, action] = 1

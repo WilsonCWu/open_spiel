@@ -26,7 +26,7 @@ from open_spiel.python.games import *
 flags.DEFINE_string("game", "ttt", "Name of the game.")
 flags.DEFINE_integer("uct_c", 2, "UCT's exploration constant.")
 flags.DEFINE_integer("max_simulations", 50, "How many simulations to run.")
-flags.DEFINE_integer("train_batch_size", 2 ** 10, "Batch size for learning.")
+flags.DEFINE_integer("train_batch_size", 2 ** 9, "Batch size for learning.")
 flags.DEFINE_integer("replay_buffer_size", 2 ** 16,
                      "How many states to store in the replay buffer.")
 flags.DEFINE_integer("replay_buffer_reuse", 3,
