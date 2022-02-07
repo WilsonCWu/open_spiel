@@ -1,0 +1,5 @@
+[2022-02-06 20:36:08.056] learner started
+[2022-02-06 20:36:08.056] Initializing model
+[2022-02-06 20:36:16.679] Model type: resnet(128, 10)
+[2022-02-06 20:36:16.680] Model size: 3478836 variables
+[2022-02-06 20:36:18.882] Initial checkpoint: ./savettt/checkpoint-0

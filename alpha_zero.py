@@ -45,8 +45,8 @@ flags.DEFINE_integer("nn_width", 2 ** 7, "How wide should the network be.")
 flags.DEFINE_integer("nn_depth", 10, "How deep should the network be.")
 flags.DEFINE_string("path", "./savettt", "Where to save checkpoints.")
 flags.DEFINE_integer("checkpoint_freq", 5, "Save a checkpoint every N steps.")
-flags.DEFINE_integer("actors", 2, "How many actors to run.")
-flags.DEFINE_integer("evaluators", 1, "How many evaluators to run.")
+flags.DEFINE_integer("actors", 4, "How many actors to run.")
+flags.DEFINE_integer("evaluators", 2, "How many evaluators to run.")
 flags.DEFINE_integer("evaluation_window", 50,
                      "How many games to average results over.")
 flags.DEFINE_integer(

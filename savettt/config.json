@@ -1,0 +1,32 @@
+{
+  "actors": 4,
+  "checkpoint_freq": 5,
+  "eval_levels": 6,
+  "evaluation_window": 50,
+  "evaluators": 2,
+  "game": "ttt",
+  "learning_rate": 0.001,
+  "max_simulations": 50,
+  "max_steps": 0,
+  "nn_depth": 10,
+  "nn_model": "resnet",
+  "nn_width": 128,
+  "observation_shape": [
+    2,
+    27,
+    6,
+    5
+  ],
+  "output_size": 730,
+  "path": "./savettt",
+  "policy_alpha": 0.015,
+  "policy_epsilon": 0.25,
+  "quiet": true,
+  "replay_buffer_reuse": 3,
+  "replay_buffer_size": 65536,
+  "temperature": 1.0,
+  "temperature_drop": 8,
+  "train_batch_size": 512,
+  "uct_c": 2,
+  "weight_decay": 0.0001
+}
